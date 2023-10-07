@@ -18,7 +18,7 @@ const server = http.createServer((req, res) => {
   //returning json
 
   if (req.method === "GET" && req.url === "/course") {
-    res.writeHead(200, { "Content-Type": "application/jspm" });
+    res.writeHead(200, { "Content-Type": "application/json" });
     const data = {
       name: "LEARN NODE",
       desc: "BUILD APIS WITH NODEJS",
@@ -28,6 +28,8 @@ const server = http.createServer((req, res) => {
   }
 });
 
-server.listen(3000, () => {
+const app = require("./server");
+
+app.listen(3000, () => {
   console.log("server on localhost:3000");
 });
