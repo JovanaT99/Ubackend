@@ -18,5 +18,10 @@ desc String
 duration Float
 data DateTime @default (now())
 }
-
+model Video{
+  id Int @id @default(autoincrement())
+  title String
+  desc String
+  url String
+}
 
