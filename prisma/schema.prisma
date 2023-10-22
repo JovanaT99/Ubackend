@@ -10,16 +10,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Instructor{
-id Int @id @default(autoincrement())
-email String @unique
-name String 
-zip String 
-country String 
-city String
-courses Course[]
-
-
+model Instructor {
+  id      Int      @id @default(autoincrement())
+  email   String   @unique
+  name    String
+  zip     String
+  country String
+  city    String
+  courses Course[]
 }
 
 model Course {
@@ -29,6 +27,9 @@ model Course {
   duration Float
   data     DateTime @default(now())
   videos   Video[]
+
+  instructorId Int?
+  Instructor   Instructor? @relation(fields: [instructorId], references: [id])
 }
 
 model Video {
