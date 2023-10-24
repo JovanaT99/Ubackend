@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import express from "express";
 import morgan from "morgan";
+import errorHandler from "error-handler";
 
 const app = express();
 const prisma = new PrismaClient();
@@ -15,7 +16,8 @@ const prisma = new PrismaClient();
 app.use(morgan("dev"));
 
 app.get("/", (req, res) => {
-  res.send("Hello");
+  throw new Error("NEW ERROR");
+  res.send("Hello world");
 });
 
 //GET api/course
@@ -60,15 +62,29 @@ app.post("/api/course", async (req, res) => {
       // },
     },
   });
-
+  //send the record back to resposnse
   res.status(200);
   return res.json(course);
 });
+
+app.use(
+  (
+    error: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    console.log(`ERROR: ${error.message}`);
+    next(error);
+  }
+);
 
 //create endpoint
 
 //create new record
 
 //manually input here
+
+app.use(errorHandler());
 
 export default app;
