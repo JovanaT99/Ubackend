@@ -64,10 +64,18 @@ export const deleteCourseById = async (req, res) => {
 
 //handler function
 export const updateCourse = async (req, res) => {
+  const errors = validationResult(req);
 
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
 
+  const updateCourse = await prisma.course.update({
+    where: {
+      id: parseInt(req.params.id),
+    },
 
-const course = await
-
-
+    data: req.body,
+  });
+  return res.status(200).json(updateCourse);
 };
