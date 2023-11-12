@@ -7,13 +7,13 @@ import {
 } from "./handlers/course";
 import { postCourse } from "./handlers/course";
 import { body, param } from "express-validator";
+import { createInstructor, getInstructor } from "./handlers/instructor";
 
 const router = Router();
 
-router.get("/courses", getCourses);
+router.get("/courses/:instructorId", param("instructorId").isInt(), getCourses);
 router.post(
-  "/courses",
-
+  "/course",
   body("title").isString().notEmpty(),
   body("duration").isFloat().notEmpty(),
   body("desc").isString().notEmpty(),
@@ -32,5 +32,18 @@ router.put(
   body("instructorId").isInt().optional(),
   updateCourse
 );
+
+router.post(
+  "/instructor",
+  body("email").isString().isEmail().notEmpty(),
+  body("name").isString().notEmpty(),
+  body("zip").isString().notEmpty(),
+  body("country").isString().notEmpty(),
+  body("city").isString().notEmpty(),
+
+  createInstructor
+);
+
+router.get("/instructor/:id", param("id").isInt(), getInstructor);
 
 export default router;

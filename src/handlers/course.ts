@@ -1,11 +1,26 @@
 import prisma from "../db";
 import { validationResult } from "express-validator";
 
+// get
 export const getCourses = async (req, res) => {
-  const courses = await prisma.course.findMany();
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const courses = await prisma.course.findMany({
+    where: {
+      instructorId: +req.params.instructorId,
+    },
+
+    include: {
+      Instructor: true,
+    },
+  });
   res.status(200).json(courses);
 };
 
+// post
 export const postCourse = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -22,6 +37,8 @@ export const postCourse = async (req, res) => {
   });
   return res.status(201).json(course);
 };
+
+// getById
 
 export const getCourseById = async (req, res) => {
   const errors = validationResult(req);
@@ -40,6 +57,7 @@ export const getCourseById = async (req, res) => {
   return res.status(200).json(course);
 };
 
+// deleteById
 export const deleteCourseById = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -62,7 +80,7 @@ export const deleteCourseById = async (req, res) => {
   return res.status(200).json(deleteCourse);
 };
 
-//handler function
+// update
 export const updateCourse = async (req, res) => {
   const errors = validationResult(req);
 
